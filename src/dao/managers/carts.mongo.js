@@ -44,17 +44,16 @@ export class CartsMongo{
                 throw new Error("El carrito no existe")
             }
 
-            /*let existProduct = cart.products.find(product => product.productId === productId);
-            if (existProduct) {
-                existProduct.quantity += 1; // Incrementa la cantidad si el producto ya existe en el carrito
+            let searchProductIndex = cart.products.findIndex((product) => product._id.toString() === productId);
+            if (searchProductIndex !== -1) {
+            cart.products[searchProductIndex].quantity++;
             } else {
-                existProduct = {productId, quantity: 1}
-                cart.products.push(existProduct); // Agrega el producto con cantidad 1 si no existe
-            }*/
+            const newProduct = { _id: productId, quantity: 1 };
+            cart.products.push(newProduct);
+        }
 
-            cart.products.push (productId);
-            await cart.save();
-            return "Producto agregado al carrito";
+    await cart.save();
+    return "Producto agregado al carrito";
         } catch (error) {
             throw new Error(`Error al agregar el producto ${error.message}`);
         }
